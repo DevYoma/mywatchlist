@@ -1,0 +1,7 @@
+// Re-export all services for convenience
+export { AuthService } from './auth.service'
+export { ProfileService } from './profile.service'
+export { TMDBService } from './tmdb.service'
+export { WatchlistService } from './watchlist.service'
+export { FollowService } from './follow.service'
+export { RatingService } from './rating.service'

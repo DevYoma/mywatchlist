@@ -1,0 +1,173 @@
+/* Watchlist Grid Shared Styles */
+.watchlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.watchlist-grid .movie-card {
+  position: relative;
+  background: rgba(20, 20, 30, 0.8);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.watchlist-grid .movie-card:hover {
+  transform: translateY(-4px);
+}
+
+.watchlist-grid .movie-poster {
+  position: relative;
+  aspect-ratio: 2/3;
+  background: linear-gradient(135deg, #1a1a2e, #0a0a15);
+}
+
+.watchlist-grid .movie-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.watchlist-grid .movie-poster .no-poster {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  height: 100%;
+}
+
+.watchlist-grid .remove-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(255, 107, 107, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.watchlist-grid .movie-card:hover .remove-btn {
+  opacity: 1;
+}
+
+.watchlist-grid .remove-btn:hover {
+  transform: scale(1.1);
+  background: #ff6b6b;
+}
+
+.watchlist-grid .remove-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.watchlist-grid .rating-badge {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffcc00;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.watchlist-grid .movie-info {
+  padding: 0.75rem;
+}
+
+.watchlist-grid .movie-info h3 {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.watchlist-grid .loading-state,
+.watchlist-grid .empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem;
+  color: #888;
+}
+
+.watchlist-grid .empty-state .btn-add {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  color: #00ffff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.load-more-btn {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: transparent;
+  border: 1px dashed rgba(0, 255, 255, 0.3);
+  color: #00ffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.load-more-btn:hover {
+  background: rgba(0, 255, 255, 0.05);
+  border-style: solid;
+}
+
+/* Signup CTA for non-logged users */
+.signup-cta {
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-top: 1rem;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 100, 150, 0.1) 100%);
+  border: 1px dashed rgba(0, 212, 255, 0.3);
+  border-radius: 12px;
+}
+
+.signup-cta p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.btn-signup {
+  display: inline-block;
+  background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+  color: #0a0e14;
+  padding: 0.75rem 2rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.btn-signup:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+}
