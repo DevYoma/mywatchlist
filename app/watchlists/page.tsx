@@ -3,11 +3,11 @@
 import './watchlists.css'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth, useProfile, useAllWatchlists, useWatchlistLikeMutations, TMDBService } from '@/hooks'
+import { useAuth, useProfile, useAllWatchlists, useWatchlistLikeMutations, useUnreadActivityCount, TMDBService } from '@/hooks'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
-import { ProfileMenu } from '@/components/ProfileMenu'
+import { Header } from '@/components/Header'
 import type { WatchlistItem } from '@/services/watchlists.service'
 
 export default function WatchlistsPage() {
@@ -16,6 +16,7 @@ export default function WatchlistsPage() {
   const { profile } = useProfile(user?.id)
   const { data: watchlists, isLoading } = useAllWatchlists(user?.id)
   const { like, unlike, isLikePending, isUnlikePending } = useWatchlistLikeMutations(user?.id)
+  const { data: unreadCount = 0 } = useUnreadActivityCount(user?.id)
 
   // Don't redirect - allow non-authenticated users to view watchlists
 
@@ -36,25 +37,12 @@ export default function WatchlistsPage() {
       <div className="grid-background" />
       <div className="border-glow" />
 
-      {/* Header */}
-      <header className="watchlists-header">
-        <div className="logo">
-          <Link href="/dashboard" className="logo-link">
-            <div className="logo-icon">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l4.59-4.58L18 11l-6 6z"/>
-              </svg>
-            </div>
-            <span className="logo-text">MYWATCHLIST</span>
-          </Link>
-        </div>
-        <nav className="header-nav">
-          <Link href="/dashboard" className="nav-link">Dashboard</Link>
-          <Link href="/discover" className="nav-link">Explore</Link>
-          <Link href="/watchlists" className="nav-link active">Watchlists</Link>
-        </nav>
-        <ProfileMenu username={profile?.username} aesthetic="Cinema" />
-      </header>
+      <Header 
+        username={profile?.username}
+        aesthetic="Cinema"
+        isLoggedIn={isLoggedIn}
+        unreadCount={unreadCount}
+      />
 
       <div className="watchlists-container">
         <section className="hero-section">

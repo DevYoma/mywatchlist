@@ -3,11 +3,11 @@
 import './activity.css'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth, useProfile, useFollowingActivity } from '@/hooks'
+import { useAuth, useProfile, useFollowingActivity, useUnreadActivityCount } from '@/hooks'
 import { formatDistanceToNow } from 'date-fns'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ProfileMenu } from '@/components/ProfileMenu'
+import { Header } from '@/components/Header'
 import type { ActivityItem } from '@/services/activity.service'
 
 export default function ActivityPage() {
@@ -15,6 +15,7 @@ export default function ActivityPage() {
   const { user, isLoggedIn, isLoading: isAuthLoading } = useAuth()
   const { profile } = useProfile(user?.id)
   const { data: activities, isLoading, error } = useFollowingActivity(user?.id)
+  const { data: unreadCount = 0 } = useUnreadActivityCount(user?.id)
 
   useEffect(() => {
     if (!isAuthLoading && !isLoggedIn) {
@@ -39,26 +40,12 @@ export default function ActivityPage() {
       <div className="grid-background" />
       <div className="border-glow" />
 
-      {/* Header */}
-      <header className="activity-header">
-        <div className="logo">
-          <Link href="/dashboard" className="logo-link">
-            <div className="logo-icon">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l4.59-4.58L18 11l-6 6z"/>
-              </svg>
-            </div>
-            <span className="logo-text">MYWATCHLIST</span>
-          </Link>
-        </div>
-        <nav className="header-nav">
-          <Link href="/dashboard" className="nav-link">Dashboard</Link>
-          <Link href="/discover" className="nav-link">Explore</Link>
-          <Link href="/activity" className="nav-link active">Activity</Link>
-          <Link href="/watchlists" className="nav-link">Watchlists</Link>
-        </nav>
-        <ProfileMenu username={profile?.username} aesthetic="Film" />
-      </header>
+      <Header 
+        username={profile?.username}
+        aesthetic="Film"
+        isLoggedIn={isLoggedIn}
+        unreadCount={unreadCount}
+      />
 
       <div className="activity-container">
         <section className="hero-section">

@@ -411,8 +411,10 @@
 
 .rating-display {
   display: flex;
+  justify-content: center;
   align-items: baseline;
   gap: 0.25rem;
+  margin-top: 1rem;
 }
 
 .rating-value {

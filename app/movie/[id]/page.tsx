@@ -1,12 +1,13 @@
 'use client'
 
 import './movie.css'
+import './movie-mobile.css'
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useAuth, useProfile, useMovieDetails, useRating, useWatchlist, TMDBService } from '@/hooks'
+import { useAuth, useProfile, useMovieDetails, useRating, useWatchlist, useUnreadActivityCount, TMDBService } from '@/hooks'
 import { toast } from 'sonner'
-import { ProfileMenu } from '@/components/ProfileMenu'
+import { Header } from '@/components/Header'
 
 export default function MoviePage() {
   const params = useParams()
@@ -16,6 +17,7 @@ export default function MoviePage() {
   // Auth via React Query
   const { user, isLoggedIn, isLoading: isAuthLoading } = useAuth()
   const { profile } = useProfile(user?.id)
+  const { data: unreadCount = 0 } = useUnreadActivityCount(user?.id)
 
   // Movie details via React Query
   const { data: movie, isLoading: isMovieLoading } = useMovieDetails(movieId)
@@ -166,33 +168,12 @@ export default function MoviePage() {
       <div className="grid-background" />
       <div className="border-glow" />
 
-      {/* Header */}
-      <header className="movie-header">
-        <div className="header-left">
-          <Link href="/dashboard" className="logo-link">
-            <div className="logo-icon">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l4.59-4.58L18 11l-6 6z"/>
-              </svg>
-            </div>
-            <span className="logo-text">MyWatchList</span>
-          </Link>
-        </div>
-
-        <nav className="header-nav">
-          <Link href="/dashboard" className="nav-link">Dashboard</Link>
-          <Link href="/discover" className="nav-link">Explore</Link>
-          <Link href="/watchlists" className="nav-link">Watchlists</Link>
-        </nav>
-
-        <div className="header-right">
-          {isLoggedIn ? (
-            <ProfileMenu username={profile?.username} aesthetic="Cinema" />
-          ) : (
-            <Link href="/auth" className="sign-in-btn">Sign In</Link>
-          )}
-        </div>
-      </header>
+      <Header 
+        username={profile?.username}
+        aesthetic="Cinema"
+        isLoggedIn={isLoggedIn}
+        unreadCount={unreadCount}
+      />
 
       {/* Breadcrumb */}
       <div className="breadcrumb">
@@ -273,7 +254,7 @@ export default function MoviePage() {
                 </div>
                 <div className="rating-display">
                   <span className="rating-value">{sliderValue.toFixed(1)}</span>
-                  <span className="rating-max">/10</span>
+                  <span className="rating-max">/ 10</span>
                 </div>
               </div>
 

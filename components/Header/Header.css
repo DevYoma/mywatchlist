@@ -1,0 +1,290 @@
+/* Header Component */
+.app-header {
+  background: rgba(20, 20, 30, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+/* Logo */
+.logo {
+  flex-shrink: 0;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: white;
+  transition: opacity 0.2s;
+}
+
+.logo-link:hover {
+  opacity: 0.8;
+}
+
+.logo-icon {
+  width: 28px;
+  height: 28px;
+  color: #00d4ff;
+}
+
+.logo-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Desktop Nav */
+.desktop-nav {
+  display: flex;
+  gap: 1.5rem;
+  flex: 1;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  color: white;
+  border-bottom-color: rgba(0, 212, 255, 0.3);
+}
+
+.nav-link.active {
+  color: #00d4ff;
+  border-bottom-color: #00d4ff;
+}
+
+/* Right Side */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.notification-btn {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.6rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ff0050;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.35rem;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+  line-height: 1;
+}
+
+.desktop-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.username {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.sign-in-btn {
+  background: linear-gradient(135deg, #00d4ff, #0099cc);
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.sign-in-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mobile-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  display: none;
+  background: rgba(20, 20, 30, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 2rem;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobile-nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-nav-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.mobile-nav-link.active {
+  background: rgba(0, 212, 255, 0.1);
+  color: #00d4ff;
+}
+
+.mobile-nav-link.sign-out-btn {
+  background: rgba(255, 0, 80, 0.1);
+  color: #ff0050;
+  border: 1px solid rgba(255, 0, 80, 0.2);
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mobile-nav-link.sign-out-btn:hover {
+  background: rgba(255, 0, 80, 0.2);
+}
+
+.mobile-notification-badge {
+  background: #ff0050;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.mobile-divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 0.5rem 0;
+}
+
+/* Tablet & Mobile */
+@media (max-width: 768px) {
+  .header-container {
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+  }
+
+  .logo-text {
+    font-size: 0.95rem;
+  }
+
+  .logo-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .desktop-nav {
+    display: none;
+  }
+
+  .desktop-profile {
+    display: none;
+  }
+
+  .notification-btn {
+    display: none;
+  }
+
+  .sign-in-btn {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .mobile-menu {
+    display: flex;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .header-container {
+    padding: 0.75rem 1rem;
+  }
+
+  .logo-text {
+    font-size: 0.85rem;
+  }
+
+  .mobile-menu {
+    padding: 1rem;
+  }
+
+  .mobile-nav-link {
+    font-size: 0.9rem;
+    padding: 0.65rem 0.75rem;
+  }
+}

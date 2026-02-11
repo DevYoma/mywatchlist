@@ -3,10 +3,11 @@
 import './settings.css'
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth, useProfile, useProfileStats, useCheckUsername } from '@/hooks'
+import { useAuth, useProfile, useProfileStats, useCheckUsername, useUnreadActivityCount } from '@/hooks'
 import { AuthService } from '@/services'
 import Link from 'next/link'
 import { toast } from 'sonner'
+import { Header } from '@/components/Header'
 
 // Genre options
 const GENRE_OPTIONS = [
@@ -20,23 +21,20 @@ export default function SettingsProfilePage() {
   const router = useRouter()
   
   // Auth via React Query - no useEffect needed!
-  const { user, isLoading: isAuthLoading, isLoggedIn } = useAuth()
-
-  console.log(user, isAuthLoading, isLoggedIn)
+  const { user, isLoggedIn, isLoading: isAuthLoading } = useAuth()
   
   // Profile via React Query
-  const { 
-    profile, 
-    isLoading: isProfileLoading, 
-    updateProfile, 
-    updatePreferences,
-    isUpdating 
-  } = useProfile(user?.id)
+  const { profile, isLoading: isProfileLoading, updateProfile, updatePreferences, isUpdating } = useProfile(user?.id)
 
-  // console.log(profile)
-  
   // Stats via React Query
   const { data: stats } = useProfileStats(user?.id)
+  const { data: unreadCount = 0 } = useUnreadActivityCount(user?.id)
+  
+  // Get aesthetic from profile preferences (genres is an array)
+  const aesthetic = (Array.isArray(profile?.preferences) && profile.preferences.length > 0) 
+    ? profile.preferences[0] 
+    : 'Movie'
+
   
   // Form states (local, for editing)
   const [username, setUsername] = useState('')
@@ -160,37 +158,12 @@ export default function SettingsProfilePage() {
       <div className="grid-background" />
       <div className="border-glow" />
 
-      {/* Header */}
-      <header className="settings-header">
-        <Link href="/dashboard" className="logo-link">
-          <div className="logo-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l4.59-4.58L18 11l-6 6z"/>
-            </svg>
-          </div>
-          <span className="logo-text">MyWatchList</span>
-        </Link>
-        
-        <nav className="header-nav">
-          <Link href="/dashboard" className="nav-link">Dashboard</Link>
-          <Link href="/discover" className="nav-link">Explore</Link>
-          <Link href="/activity" className="nav-link">Activity</Link>
-          <Link href="/watchlists" className="nav-link">Watchlists</Link>
-        </nav>
-
-        <div className="header-actions">
-          <button className="notification-btn">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-              <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
-            </svg>
-          </button>
-          <button className="settings-active-btn">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-              <path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
-            </svg>
-          </button>
-        </div>
-      </header>
+      <Header 
+        username={profile?.username}
+        aesthetic={aesthetic}
+        isLoggedIn={isLoggedIn}
+        unreadCount={unreadCount}
+      />
 
       {/* Main Content */}
       <main className="settings-main">

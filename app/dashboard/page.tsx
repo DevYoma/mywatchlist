@@ -4,20 +4,12 @@ import './dashboard.css'
 import '@/components/ActivityFeed/ActivityFeed.css'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth, useProfile, useProfileStats, useWatchlist, useTrending, useFollow, TMDBService } from '@/hooks'
+import { useAuth, useProfile, useProfileStats, useWatchlist, useTrending, useFollow, useUnreadActivityCount, TMDBService } from '@/hooks'
 import { AuthService } from '@/services'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { ActivityFeed } from '@/components/ActivityFeed'
-import { ProfileMenu } from '@/components/ProfileMenu'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { Header } from '@/components/Header'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -29,6 +21,7 @@ export default function DashboardPage() {
   const { watchlist, isLoading: isWatchlistLoading, removeFromWatchlist, isRemoving } = useWatchlist(user?.id)
   const { data: trendingMovies, isLoading: isTrendingLoading } = useTrending('week')
   const { following } = useFollow(user?.id)
+  const { data: unreadCount = 0 } = useUnreadActivityCount(user?.id)
 
   // State for delete confirmation
   const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; title: string } | null>(null)
@@ -80,47 +73,12 @@ export default function DashboardPage() {
       <div className="grid-background" />
       <div className="border-glow" />
 
-      {/* Header */}
-      <header className="dashboard-header">
-        <div className="header-left">
-          <Link href="/dashboard" className="logo-link">
-            <div className="logo-icon">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l4.59-4.58L18 11l-6 6z"/>
-              </svg>
-            </div>
-            <span className="logo-text">MyWatchList</span>
-          </Link>
-        </div>
-        
-        <nav className="header-nav">
-          <Link href="/dashboard" className="nav-link active">Dashboard</Link>
-          <Link href="/discover" className="nav-link">Explore</Link>
-          <Link href="/activity" className="nav-link">Activity</Link>
-          <Link href="/watchlists" className="nav-link">Watchlists</Link>
-        </nav>
-
-        {/* Search bar - commented out for now */}
-        {/* <div className="header-search">
-          <svg className="search-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-          </svg>
-          <input type="text" placeholder="Search films, lists, or movie buffs..." className="search-input" />
-        </div> */}
-
-        <div className="header-right">
-          <button className="notification-btn">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-              <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
-            </svg>
-          </button>
-          
-          <div className="user-menu">
-            <span className="username">@{profile?.username || 'user'}</span>
-            <ProfileMenu username={profile?.username} aesthetic={aesthetic} />
-          </div>
-        </div>
-      </header>
+      <Header 
+        username={profile?.username}
+        aesthetic={aesthetic}
+        isLoggedIn={isLoggedIn}
+        unreadCount={unreadCount}
+      />
 
       {/* Main Content */}
       <main className="dashboard-main">

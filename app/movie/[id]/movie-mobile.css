@@ -1,0 +1,271 @@
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .movie-page {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  .movie-content {
+    padding: 1.5rem 1.5rem;
+    max-width: 100%;
+    overflow-x: hidden;
+    margin: 0 auto;
+  }
+
+  .breadcrumb {
+    padding: 0 1.5rem;
+    margin: 0 auto;
+  }
+
+  .movie-hero {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem 1.5rem;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .poster-section {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .info-section {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+    margin: 0 auto;
+  }
+
+  .movie-title {
+    font-size: 1.8rem;
+    text-align: center;
+    word-wrap: break-word;
+  }
+
+  /* Fix overview text overflow */
+  .movie-overview {
+    width: 100%;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    text-align: left;
+  }
+
+  /* Hide /10 text on mobile */
+  .rating-max {
+    display: none !important;
+  }
+
+  /* Rating Section Mobile Fixes */
+  .rating-section {
+    padding: 1rem 1.5rem;
+    overflow-x: hidden;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .rating-slider-container {
+    overflow-x: hidden;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .slider-track {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.15rem;
+    overflow-x: hidden;
+    padding: 0.5rem 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .slider-dot {
+    min-width: 30px;
+    width: 30px;
+    height: 30px;
+    font-size: 0.7rem;
+    flex-shrink: 1;
+    padding: 0;
+  }
+
+  .rating-display {
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .rating-value {
+    font-size: 2.5rem;
+  }
+
+  .recent-ratings {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .movie-content {
+    padding: 1rem 1rem;
+  }
+
+  .movie-title {
+    font-size: 1.5rem;
+  }
+
+  .info-section {
+    padding: 0 1rem;
+  }
+
+  .breadcrumb {
+    padding: 0 1rem;
+  }
+
+  .movie-hero {
+    padding: 1rem;
+  }
+
+  .meta-item {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .genre-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  /* Much smaller rating dots to fit all 10 on screen */
+  .slider-dot {
+    min-width: 24px;
+    width: 24px;
+    height: 24px;
+    font-size: 0.65rem;
+  }
+
+  .slider-track {
+    gap: 0.1rem;
+  }
+
+  .rating-section {
+    padding: 0.75rem 1rem;
+    margin: 0 auto;
+  }
+
+  .rating-header h3 {
+    font-size: 1rem;
+  }
+
+  .rating-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .save-rating-btn, .delete-rating-btn {
+    width: 100%;
+    padding: 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .btn-primary, .btn-secondary {
+    width: 100%;
+  }
+
+  /* Rating value smaller on tiny screens */
+  .rating-value {
+    font-size: 2rem;
+  }
+}
+
+/* Extra small screens - allow scroll */
+@media (max-width: 425px) {
+  .slider-track {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slider-dot {
+    flex-shrink: 0;
+  }
+
+  /* Fix entire movie content structure */
+  .movie-main {
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  .movie-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+    max-width: 100%;
+    overflow-x: hidden;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .poster-section {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0 auto;
+  }
+
+  .movie-poster {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .movie-credits {
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  /* Fix details-section overflow */
+  .details-section {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .movie-title {
+    font-size: 1.5rem;
+    word-wrap: break-word;
+  }
+
+  .movie-meta {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .stats-grid {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .stat-item {
+    min-width: auto;
+  }
+
+  .global-ratings {
+    padding: 1rem;
+  }
+
+  .recent-activity {
+    padding: 1rem;
+  }
+}

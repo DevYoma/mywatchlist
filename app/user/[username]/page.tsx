@@ -8,8 +8,9 @@ import { ProfileService, AuthService, WatchlistService } from '@/services'
 import type { Profile, WatchlistMovie } from '@/types'
 import Link from 'next/link'
 import { WatchlistGrid } from '@/components/WatchlistGrid'
-import { useFollow } from '@/hooks'
+import { useAuth, useFollow, useUnreadActivityCount } from '@/hooks'
 import { ProfileActions } from '@/components/ProfileActions'
+import { Header } from '@/components/Header'
 
 interface ProfileStats {
   moviesRated: number
