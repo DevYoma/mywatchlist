@@ -172,9 +172,10 @@ export default function SettingsProfilePage() {
         </Link>
         
         <nav className="header-nav">
-          <Link href="/discover" className="nav-link">Movies</Link>
-          <span className="nav-link disabled">Lists</span>
-          <span className="nav-link disabled">Community</span>
+          <Link href="/dashboard" className="nav-link">Dashboard</Link>
+          <Link href="/discover" className="nav-link">Explore</Link>
+          <Link href="/activity" className="nav-link">Activity</Link>
+          <Link href="/watchlists" className="nav-link">Watchlists</Link>
         </nav>
 
         <div className="header-actions">

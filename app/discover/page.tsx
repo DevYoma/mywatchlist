@@ -3,9 +3,10 @@
 import './discover.css'
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth, useTrending, useSearchMovies, useWatchlist, TMDBService } from '@/hooks'
+import { useAuth, useProfile, useTrending, useSearchMovies, useWatchlist, TMDBService } from '@/hooks'
 import Link from 'next/link'
 import { toast } from 'sonner'
+import { ProfileMenu } from '@/components/ProfileMenu'
 
 // Genre mapping for TMDB
 const GENRES = [
@@ -27,6 +28,7 @@ export default function DiscoverPage() {
   
   // Auth state via React Query hook - NO useEffect needed!
   const { user, isLoggedIn } = useAuth()
+  const { profile } = useProfile(user?.id)
   
   // Watchlist via React Query
   const { watchlist, addToWatchlist, isAdding } = useWatchlist(user?.id)
@@ -137,22 +139,15 @@ useEffect(() => {
         </div>
         
         <nav className="header-nav">
-          {isLoggedIn ? (
-            <Link href="/dashboard" className="nav-link">DASHBOARD</Link>
-          ) : (
-            <Link href="/auth" className="nav-link">SIGN IN</Link>
-          )}
-          <Link href="/discover" className="nav-link active">SEARCH & RATE</Link>
-          <span className="nav-link disabled">WATCHLIST</span>
+          {isLoggedIn && <Link href="/dashboard" className="nav-link">Dashboard</Link>}
+          <Link href="/discover" className="nav-link active">Explore</Link>
+          {isLoggedIn && <Link href="/activity" className="nav-link">Activity</Link>}
+          {isLoggedIn && <Link href="/watchlists" className="nav-link">Watchlists</Link>}
         </nav>
 
         <div className="header-right">
           {isLoggedIn ? (
-            <button onClick={() => router.push('/dashboard')} className="avatar-btn">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-              </svg>
-            </button>
+            <ProfileMenu username={profile?.username} aesthetic="Movie" />
           ) : (
             <Link href="/auth" className="sign-in-btn">SIGN IN</Link>
           )}

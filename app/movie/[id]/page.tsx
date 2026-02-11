@@ -4,8 +4,9 @@ import './movie.css'
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useAuth, useMovieDetails, useRating, useWatchlist, TMDBService } from '@/hooks'
+import { useAuth, useProfile, useMovieDetails, useRating, useWatchlist, TMDBService } from '@/hooks'
 import { toast } from 'sonner'
+import { ProfileMenu } from '@/components/ProfileMenu'
 
 export default function MoviePage() {
   const params = useParams()
@@ -14,6 +15,7 @@ export default function MoviePage() {
 
   // Auth via React Query
   const { user, isLoggedIn, isLoading: isAuthLoading } = useAuth()
+  const { profile } = useProfile(user?.id)
 
   // Movie details via React Query
   const { data: movie, isLoading: isMovieLoading } = useMovieDetails(movieId)
@@ -178,18 +180,14 @@ export default function MoviePage() {
         </div>
 
         <nav className="header-nav">
-          <Link href="/discover" className="nav-link">Discover</Link>
-          <span className="nav-link active">Movies</span>
-          <span className="nav-link disabled">Community</span>
+          <Link href="/dashboard" className="nav-link">Dashboard</Link>
+          <Link href="/discover" className="nav-link">Explore</Link>
+          <Link href="/watchlists" className="nav-link">Watchlists</Link>
         </nav>
 
         <div className="header-right">
           {isLoggedIn ? (
-            <Link href="/dashboard" className="user-pill">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-              </svg>
-            </Link>
+            <ProfileMenu username={profile?.username} aesthetic="Cinema" />
           ) : (
             <Link href="/auth" className="sign-in-btn">Sign In</Link>
           )}

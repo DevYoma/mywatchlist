@@ -7,6 +7,13 @@ import { ProfileService, AuthService, RatingService, WatchlistService, TMDBServi
 import type { Profile, Rating, WatchlistMovie } from '@/types'
 import Link from 'next/link'
 import { toast } from 'sonner'
+import { MoreHorizontal, Trash2, Bookmark, BookmarkCheck } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 interface RatingWithMovie extends Rating {
   movie?: {
@@ -149,6 +156,35 @@ export default function RatingsPage() {
     }
   }
 
+  // Handle removing from watchlist
+  const handleRemoveFromWatchlist = async (rating: RatingWithMovie) => {
+    if (!profile) return
+    
+    // Find watchlist item ID
+    const watchlistItem = watchlist.find(w => w.tmdb_id === rating.movie_id)
+    if (!watchlistItem) return
+
+    setAddingId(rating.movie_id) // reuse loading state
+    try {
+      await WatchlistService.removeFromWatchlist(watchlistItem.id)
+      
+      // Update local state
+      setRatings(ratings.map(r => 
+        r.id === rating.id ? { ...r, inWatchlist: false } : r
+      ))
+      // Update watchlist state too
+      setWatchlist(watchlist.filter(w => w.id !== watchlistItem.id))
+      
+      toast.success('Removed from watchlist')
+    } catch {
+      toast.error('Failed to remove from watchlist')
+    } finally {
+      setAddingId(null)
+    }
+  }
+
+
+
   // VISIBILITY LOGIC: Sort by rating (highest first), limit to 50% for non-logged users
   const displayRatings = (() => {
     // Sort by rating value: highest to lowest
@@ -265,6 +301,38 @@ export default function RatingsPage() {
             <div className="ratings-grid">
               {displayRatings.map((rating) => (
                 <div key={rating.id} className="rating-card">
+                  {/* Mobile Menu Trigger (Absolute positioned over poster) */}
+                  {isOwner && (
+                    <div className="mobile-only mobile-menu-trigger" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+                       <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <button style={{width:'100%', height:'100%', background:'transparent', border:'none', display:'flex', alignItems:'center', justifyContent:'center', color:'white', cursor:'pointer'}}>
+                               <MoreHorizontal size={16} />
+                            </button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" style={{background: '#1a1a2e', border: '1px solid rgba(255,255,255,0.1)', color: 'white'}}>
+                            <DropdownMenuItem 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                rating.inWatchlist ? handleRemoveFromWatchlist(rating) : handleAddToWatchlist(rating);
+                              }}
+                              style={{cursor: 'pointer', fontSize: '12px'}}
+                            >
+                              {rating.inWatchlist ? <BookmarkCheck style={{marginRight: '8px', width: '14px', color: '#00ff88'}} /> : <Bookmark style={{marginRight: '8px', width: '14px'}} />}
+                              {rating.inWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={(e) => { e.stopPropagation(); handleDeleteRating(rating.id); }}
+                              style={{color: '#ff4444', cursor: 'pointer', fontSize: '12px'}}
+                            >
+                              <Trash2 style={{marginRight: '8px', width: '14px'}} />
+                              Delete Rating
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                       </DropdownMenu>
+                    </div>
+                  )}
+
                   <Link href={`/movie/${rating.movie_id}`} className="rating-link">
                     <div className="rating-poster">
                       {rating.movie?.poster_path ? (
@@ -295,33 +363,57 @@ export default function RatingsPage() {
                     </div>
                   </Link>
                   
-                  {/* Action buttons - only for owner */}
+                  {/* Desktop Actions - Stacked */}
                   {isOwner && (
-                    <div className="rating-actions">
+                    <div className="desktop-only rating-actions-stacked">
                       {!rating.inWatchlist ? (
                         <button 
                           className="add-watchlist-btn"
-                          onClick={() => handleAddToWatchlist(rating)}
+                          style={{justifyContent: 'center', width: '100%'}}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            handleAddToWatchlist(rating)
+                          }}
                           disabled={addingId === rating.movie_id}
                           title="Add to watchlist"
                         >
-                          <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
-                          </svg>
-                          {addingId === rating.movie_id ? 'ADDING...' : 'ADD TO LIST'}
+                          {addingId === rating.movie_id ? 'ADDING...' : 'ADD TO WATCHLIST'}
                         </button>
                       ) : (
-                        <span className="in-watchlist-badge">✓ IN WATCHLIST</span>
+                        <button 
+                          className="in-watchlist-btn"
+                          style={{justifyContent: 'center', width: '100%'}}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            handleRemoveFromWatchlist(rating)
+                          }}
+                          disabled={addingId === rating.movie_id}
+                          title="Remove from watchlist"
+                        >
+                          {addingId === rating.movie_id ? 'REMOVING...' : 'IN WATCHLIST'}
+                        </button>
                       )}
                       <button 
-                        className="delete-btn"
-                        onClick={() => handleDeleteRating(rating.id)}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDeleteRating(rating.id); }}
                         disabled={deletingId === rating.id}
-                        title="Delete rating"
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          color: 'rgba(255, 255, 255, 0.4)',
+                          fontSize: '0.6rem',
+                          fontWeight: '700',
+                          letterSpacing: '0.1em',
+                          padding: '0.5rem',
+                          cursor: 'pointer',
+                          marginTop: '0.2rem',
+                          transition: 'color 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = '#ff4444'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)'}
                       >
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                        </svg>
+                        {deletingId === rating.id ? 'DELETING...' : 'DELETE RATING'}
                       </button>
                     </div>
                   )}

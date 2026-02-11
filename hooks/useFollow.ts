@@ -67,9 +67,72 @@ export const useFollow = (userId: string | undefined) => {
 }
 
 export const useIsFollowing = (followerId: string | undefined, followingId: string | undefined) => {
+  const queryClient = useQueryClient()
+  
   return useQuery({
     queryKey: ['isFollowing', followerId, followingId],
     queryFn: () => FollowService.isFollowing(followerId!, followingId!),
     enabled: !!followerId && !!followingId,
   })
+}
+
+// Optimistic follow/unfollow mutations for instant UI updates
+export const useFollowMutations = (currentUserId: string | undefined, targetUserId: string) => {
+  const queryClient = useQueryClient()
+  
+  const followMutation = useMutation({
+    mutationFn: () => FollowService.followUser(currentUserId!, targetUserId),
+    onMutate: async () => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['isFollowing', currentUserId, targetUserId] })
+      
+      // Snapshot the previous value
+      const previousValue = queryClient.getQueryData(['isFollowing', currentUserId, targetUserId])
+      
+      // Optimistically update to true
+      queryClient.setQueryData(['isFollowing', currentUserId, targetUserId], true)
+      
+      return { previousValue }
+    },
+    onError: (err, _, context) => {
+      // Rollback on error
+      queryClient.setQueryData(['isFollowing', currentUserId, targetUserId], context?.previousValue)
+    },
+    onSuccess: () => {
+      // Invalidate related queries
+      queryClient.invalidateQueries({ queryKey: ['following', currentUserId] })
+      queryClient.invalidateQueries({ queryKey: ['followers', targetUserId] })
+      queryClient.invalidateQueries({ queryKey: ['followingCount', currentUserId] })
+      queryClient.invalidateQueries({ queryKey: ['followerCount', targetUserId] })
+    },
+  })
+
+  const unfollowMutation = useMutation({
+    mutationFn: () => FollowService.unfollowUser(currentUserId!, targetUserId),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ['isFollowing', currentUserId, targetUserId] })
+      const previousValue = queryClient.getQueryData(['isFollowing', currentUserId, targetUserId])
+      
+      // Optimistically update to false
+      queryClient.setQueryData(['isFollowing', currentUserId, targetUserId], false)
+      
+      return { previousValue }
+    },
+    onError: (err, _, context) => {
+      queryClient.setQueryData(['isFollowing', currentUserId, targetUserId], context?.previousValue)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['following', currentUserId] })
+      queryClient.invalidateQueries({ queryKey: ['followers', targetUserId] })
+      queryClient.invalidateQueries({ queryKey: ['followingCount', currentUserId] })
+      queryClient.invalidateQueries({ queryKey: ['followerCount', targetUserId] })
+    },
+  })
+
+  return {
+    follow: followMutation.mutate,
+    unfollow: unfollowMutation.mutate,
+    isFollowPending: followMutation.isPending,
+    isUnfollowPending: unfollowMutation.isPending,
+  }
 }

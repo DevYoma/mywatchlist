@@ -8,6 +8,8 @@ import { ProfileService, AuthService, WatchlistService } from '@/services'
 import type { Profile, WatchlistMovie } from '@/types'
 import Link from 'next/link'
 import { WatchlistGrid } from '@/components/WatchlistGrid'
+import { useFollow } from '@/hooks'
+import { ProfileActions } from '@/components/ProfileActions'
 
 interface ProfileStats {
   moviesRated: number
@@ -155,19 +157,7 @@ export default function ProfilePage() {
           </p>
         </div>
 
-        {isOwner && (
-          <div className="profile-actions">
-            <Link href="/settings/profile" className="btn-edit">
-              EDIT PROFILE
-            </Link>
-            <button className="btn-share">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
-              </svg>
-              SHARE LIST
-            </button>
-          </div>
-        )}
+        <ProfileActions profile={profile} isOwner={isOwner} isLoggedIn={isLoggedIn} />
       </section>
 
       {/* Stats Section */}
@@ -180,10 +170,8 @@ export default function ProfilePage() {
           <span className="stat-value">{stats.avgRating}</span>
           <span className="stat-label">AVG. RATING</span>
         </div>
-        <div className="stat-card">
-          <span className="stat-value">{stats.followers.toLocaleString()}</span>
-          <span className="stat-label">FOLLOWERS</span>
-        </div>
+        <StatsFollowerCard profileId={profile?.id} username={username} />
+        <StatsFollowingCard profileId={profile?.id} username={username} />
       </section>
 
       {/* Watchlist Section Header */}
@@ -225,5 +213,45 @@ export default function ProfilePage() {
         </div>
       </footer>
     </div>
+  )
+}
+
+function StatsFollowerCard({ profileId, username }: { profileId?: string, username?: string }) {
+  const { followerCount } = useFollow(profileId)
+  
+  if (!username) {
+    return (
+      <div className="stat-card">
+        <span className="stat-value">{followerCount.toLocaleString()}</span>
+        <span className="stat-label">FOLLOWERS</span>
+      </div>
+    )
+  }
+
+  return (
+    <Link href={`/user/${username}/followers`} className="stat-card clickable">
+      <span className="stat-value">{followerCount.toLocaleString()}</span>
+      <span className="stat-label">FOLLOWERS</span>
+    </Link>
+  )
+}
+
+function StatsFollowingCard({ profileId, username }: { profileId?: string, username?: string }) {
+  const { followingCount } = useFollow(profileId)
+  
+  if (!username) {
+    return (
+      <div className="stat-card">
+        <span className="stat-value">{followingCount.toLocaleString()}</span>
+        <span className="stat-label">FOLLOWING</span>
+      </div>
+    )
+  }
+
+  return (
+    <Link href={`/user/${username}/following`} className="stat-card clickable">
+      <span className="stat-value">{followingCount.toLocaleString()}</span>
+      <span className="stat-label">FOLLOWING</span>
+    </Link>
   )
 }
