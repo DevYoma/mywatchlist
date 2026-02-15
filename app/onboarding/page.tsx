@@ -2,7 +2,7 @@
 
 import './onboarding.css'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { toast } from 'sonner'
 import { ProfileService, AuthService } from '@/services'
 
@@ -18,7 +18,7 @@ const vibes = [
   { id: 'high-fantasy', label: 'HIGH FANTASY', icon: '🏰' },
 ]
 
-export default function OnboardingPage() {
+function OnboardingContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [selectedVibes, setSelectedVibes] = useState<string[]>([])
@@ -140,5 +140,21 @@ export default function OnboardingPage() {
         <p>SYSTEM PROTOCOL V3.0.0 © 2024 MYWATCHLIST DISCOVERY CORP.</p>
       </footer>
     </div>
+  )
+}
+
+export default function OnboardingPage() {
+  return (
+    <Suspense fallback={
+      <div className="onboarding-page">
+        <div className="grid-background" />
+        <div className="border-glow" />
+        <div className="loading" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <span>CALIBRATING SYSTEMS...</span>
+        </div>
+      </div>
+    }>
+      <OnboardingContent />
+    </Suspense>
   )
 }
