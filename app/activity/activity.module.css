@@ -50,18 +50,7 @@
   50% { opacity: 1; }
 }
 
-.activity-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 1rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+
 
 .activity-container {
   max-width: 800px;
@@ -199,8 +188,19 @@
 }
 
 .activity-content {
-  margin-left: 2.5rem;
+  margin-left: 0;
   margin-top: 0;
+}
+
+/* Mobile adjustments for user info */
+@media (max-width: 480px) {
+  .username {
+    font-size: 0.75rem;
+  }
+  
+  .time-ago {
+    font-size: 0.65rem;
+  }
 }
 
 .movie-info {
