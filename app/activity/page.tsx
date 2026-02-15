@@ -29,7 +29,7 @@ export default function ActivityPage() {
         <div className={styles['grid-background']} />
         <div className={styles['border-glow']} />
         <div className={styles['loading']}>
-          <span>LOADING ACTIVITY...</span>
+          <span>LOADING...</span>
         </div>
       </div>
     )

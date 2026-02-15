@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useIsFollowing, useFollowMutations, useAuth } from '@/hooks'
+import { toast } from 'sonner'
 import type { Profile } from '@/types'
 
 interface ProfileActionsProps {
@@ -44,9 +45,15 @@ export function ProfileActions({ profile, isOwner, isLoggedIn }: ProfileActionsP
 
   const handleFollowClick = () => {
     if (isFollowing) {
-      unfollow()
+      unfollow(undefined, {
+        onSuccess: () => toast.success(`Unfollowed ${profile.username}`),
+        onError: () => toast.error('Failed to unfollow user')
+      })
     } else {
-      follow()
+      follow(undefined, {
+        onSuccess: () => toast.success(`Following ${profile.username}`),
+        onError: () => toast.error('Failed to follow user')
+      })
     }
   }
 
