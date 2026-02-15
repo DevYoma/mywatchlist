@@ -1,6 +1,6 @@
 'use client'
 
-import './settings.css'
+import styles from './settings.module.css'
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth, useProfile, useProfileStats, useCheckUsername, useUnreadActivityCount } from '@/hooks'
@@ -143,10 +143,10 @@ export default function SettingsProfilePage() {
 
   if (loading) {
     return (
-      <div className="settings-page">
-        <div className="grid-background" />
-        <div className="border-glow" />
-        <div className="loading">
+      <div className={styles['settings-page']}>
+        <div className={styles['grid-background']} />
+        <div className={styles['border-glow']} />
+        <div className={styles['loading']}>
           <span>LOADING SETTINGS...</span>
         </div>
       </div>
@@ -154,9 +154,9 @@ export default function SettingsProfilePage() {
   }
 
   return (
-    <div className="settings-page">
-      <div className="grid-background" />
-      <div className="border-glow" />
+    <div className={styles['settings-page']}>
+      <div className={styles['grid-background']} />
+      <div className={styles['border-glow']} />
 
       <Header 
         username={profile?.username}
@@ -166,14 +166,14 @@ export default function SettingsProfilePage() {
       />
 
       {/* Main Content */}
-      <main className="settings-main">
+      <main className={styles['settings-main']}>
         {/* Avatar */}
-        <div className="avatar-section">
-          <div className="avatar-container">
+        <div className={styles['avatar-section']}>
+          <div className={styles['avatar-container']}>
             {profile?.avatar_url ? (
-              <img src={profile.avatar_url} alt={profile.username} className="avatar-img" />
+              <img src={profile.avatar_url} alt={profile.username} className={styles['avatar-img']} />
             ) : (
-              <div className="avatar-placeholder">
+              <div className={styles['avatar-placeholder']}>
                 <svg viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                 </svg>
@@ -183,78 +183,78 @@ export default function SettingsProfilePage() {
         </div>
 
         {/* Username Field */}
-        <div className="form-group">
-          <label className="form-label">USERNAME</label>
-          <div className="input-wrapper">
+        <div className={styles['form-group']}>
+          <label className={styles['form-label']}>USERNAME</label>
+          <div className={styles['input-wrapper']}>
             <input
               type="text"
               value={username}
               onChange={handleUsernameChange}
-              className={`form-input ${usernameAvailable === false ? 'error' : usernameAvailable === true ? 'success' : ''}`}
+              className={`${styles['form-input']} ${usernameAvailable === false ? styles['error'] : usernameAvailable === true ? styles['success'] : ''}`}
               placeholder="your_username"
             />
-            {checkingUsername && <span className="input-status">Checking...</span>}
-            {!checkingUsername && usernameAvailable === true && <span className="input-status success">✓ Available</span>}
-            {!checkingUsername && usernameAvailable === false && <span className="input-status error">✗ Taken</span>}
+            {checkingUsername && <span className={styles['input-status']}>Checking...</span>}
+            {!checkingUsername && usernameAvailable === true && <span className={`${styles['input-status']} ${styles['success']}`}>✓ Available</span>}
+            {!checkingUsername && usernameAvailable === false && <span className={`${styles['input-status']} ${styles['error']}`}>✗ Taken</span>}
           </div>
         </div>
 
         {/* Bio Field */}
-        <div className="form-group">
-          <label className="form-label">BIO</label>
+        <div className={styles['form-group']}>
+          <label className={styles['form-label']}>BIO</label>
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            className="form-textarea"
+            className={styles['form-textarea']}
             placeholder="Tell us about your taste..."
             rows={4}
             maxLength={200}
           />
-          <span className="char-count">{bio.length}/200</span>
+          <span className={styles['char-count']}>{bio.length}/200</span>
         </div>
 
         {/* Stats Overview (readonly) */}
-        <div className="stats-section">
-          <label className="form-label">STATS OVERVIEW</label>
-          <div className="stats-grid">
-            <div className="stat-box">
-              <span className="stat-value pink">{(stats?.moviesRated || 0).toLocaleString()}</span>
-              <span className="stat-label">MOVIES RATED</span>
+        <div className={styles['stats-section']}>
+          <label className={styles['form-label']}>STATS OVERVIEW</label>
+          <div className={styles['stats-grid']}>
+            <div className={styles['stat-box']}>
+              <span className={`${styles['stat-value']} ${styles['pink']}`}>{(stats?.moviesRated || 0).toLocaleString()}</span>
+              <span className={styles['stat-label']}>MOVIES RATED</span>
             </div>
-            <div className="stat-box">
-              <span className="stat-value">{(stats?.followers || 0).toLocaleString()}</span>
-              <span className="stat-label">FOLLOWERS</span>
+            <div className={styles['stat-box']}>
+              <span className={styles['stat-value']}>{(stats?.followers || 0).toLocaleString()}</span>
+              <span className={styles['stat-label']}>FOLLOWERS</span>
             </div>
-            <div className="stat-box">
-              <span className="stat-value">0</span>
-              <span className="stat-label">LISTS</span>
+            <div className={styles['stat-box']}>
+              <span className={styles['stat-value']}>0</span>
+              <span className={styles['stat-label']}>LISTS</span>
             </div>
-            <div className="stat-box">
-              <span className="stat-value">0</span>
-              <span className="stat-label">REVIEWS</span>
+            <div className={styles['stat-box']}>
+              <span className={styles['stat-value']}>0</span>
+              <span className={styles['stat-label']}>REVIEWS</span>
             </div>
           </div>
         </div>
 
         {/* Genre Preferences */}
-        <div className="form-group">
+        <div className={styles['form-group']}>
           <button 
-            className="genre-toggle-btn"
+            className={styles['genre-toggle-btn']}
             onClick={() => setShowGenres(!showGenres)}
           >
-            <span className="form-label">GENRE PREFERENCES</span>
-            <span className="toggle-icon">{showGenres ? '▼' : '▶'}</span>
+            <span className={styles['form-label']}>GENRE PREFERENCES</span>
+            <span className={styles['toggle-icon']}>{showGenres ? '▼' : '▶'}</span>
           </button>
           
           {showGenres && (
-            <div className="genres-grid">
+            <div className={styles['genres-grid']}>
               {GENRE_OPTIONS.map(genre => (
                 <button
                   key={genre}
-                  className={`genre-chip ${selectedGenres.includes(genre) ? 'selected' : ''}`}
+                  className={`${styles['genre-chip']} ${selectedGenres.includes(genre) ? styles['selected'] : ''}`}
                   onClick={() => handleGenreToggle(genre)}
                 >
-                  <span className="checkbox">{selectedGenres.includes(genre) ? '☑' : '☐'}</span>
+                  <span className={styles['checkbox']}>{selectedGenres.includes(genre) ? '☑' : '☐'}</span>
                   {genre}
                 </button>
               ))}
@@ -263,28 +263,28 @@ export default function SettingsProfilePage() {
         </div>
 
         {/* Danger Zone */}
-        <div className="danger-zone">
-          <div className="danger-header">
-            <span className="danger-icon">⚠</span>
-            <span className="danger-title">DANGER ZONE</span>
+        <div className={styles['danger-zone']}>
+          <div className={styles['danger-header']}>
+            <span className={styles['danger-icon']}>⚠</span>
+            <span className={styles['danger-title']}>DANGER ZONE</span>
           </div>
-          <p className="danger-text">Actions here are irreversible. Please proceed with caution.</p>
-          <button onClick={handleSignOut} className="signout-btn">
+          <p className={styles['danger-text']}>Actions here are irreversible. Please proceed with caution.</p>
+          <button onClick={handleSignOut} className={styles['signout-btn']}>
             SIGN OUT
           </button>
         </div>
 
         {/* Action Buttons */}
-        <div className="action-buttons">
+        <div className={styles['action-buttons']}>
           <button 
             onClick={() => router.push('/dashboard')} 
-            className="cancel-btn"
+            className={styles['cancel-btn']}
           >
             Cancel
           </button>
           <button 
             onClick={handleSave} 
-            className="save-btn"
+            className={styles['save-btn']}
             disabled={isUpdating || (username !== profile?.username && usernameAvailable === false)}
           >
             {isUpdating ? 'Saving...' : 'Save Profile Changes'}

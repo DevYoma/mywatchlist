@@ -1,7 +1,6 @@
 'use client'
 
-import './profile.css'
-import '@/components/WatchlistGrid.css'
+import styles from './profile.module.css'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { ProfileService, AuthService, WatchlistService } from '@/services'
@@ -78,10 +77,10 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="profile-page">
-        <div className="grid-background" />
-        <div className="border-glow" />
-        <div className="loading">
+      <div className={styles['profile-page']}>
+        <div className={styles['grid-background']} />
+        <div className={styles['border-glow']} />
+        <div className={styles['loading']}>
           <span>LOADING PROFILE...</span>
         </div>
       </div>
@@ -90,13 +89,13 @@ export default function ProfilePage() {
 
   if (notFound) {
     return (
-      <div className="profile-page">
-        <div className="grid-background" />
-        <div className="border-glow" />
-        <div className="not-found">
+      <div className={styles['profile-page']}>
+        <div className={styles['grid-background']} />
+        <div className={styles['border-glow']} />
+        <div className={styles['not-found']}>
           <h1>USER NOT FOUND</h1>
           <p>The profile @{username} does not exist.</p>
-          <button onClick={() => router.push(isLoggedIn ? '/dashboard' : '/discover')} className="btn-primary">
+          <button onClick={() => router.push(isLoggedIn ? '/dashboard' : '/discover')} className={styles['btn-primary']}>
             {isLoggedIn ? 'RETURN TO DASHBOARD' : 'RETURN TO DISCOVER'}
           </button>
         </div>
@@ -105,42 +104,25 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="profile-page">
+    <div className={styles['profile-page']}>
       {/* Grid background */}
-      <div className="grid-background" />
-      <div className="border-glow" />
+      <div className={styles['grid-background']} />
+      <div className={styles['border-glow']} />
 
       {/* Header */}
-      <header className="profile-header">
-        <div className="logo">
-          <Link href="/dashboard" className="logo-link">
-            <div className="logo-icon">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l4.59-4.58L18 11l-6 6z"/>
-              </svg>
-            </div>
-            <span className="logo-text">MYWATCHLIST</span>
-          </Link>
-        </div>
-        <nav className="header-nav">
-          <Link href="/discover" className="nav-link">Discover</Link>
-          <Link href={`/user/${username}`} className="nav-link active">Profile</Link>
-          {isOwner && (
-            <Link href={`/user/${username}/ratings`} className="nav-link">My Ratings</Link>
-          )}
-        </nav>
-        <div className="header-search">
-          <input type="text" placeholder="Search movies..." className="search-input" />
-        </div>
-      </header>
+      <Header 
+        username={profile?.username}
+        aesthetic="Noir"
+        isLoggedIn={isLoggedIn}
+      />
 
       {/* Profile Hero */}
-      <section className="profile-hero">
-        <div className="profile-avatar">
+      <section className={styles['profile-hero']}>
+        <div className={styles['profile-avatar']}>
           {profile?.avatar_url ? (
             <img src={profile.avatar_url} alt={profile.username} />
           ) : (
-            <div className="avatar-placeholder">
+            <div className={styles['avatar-placeholder']}>
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
               </svg>
@@ -148,12 +130,12 @@ export default function ProfilePage() {
           )}
         </div>
 
-        <div className="profile-info">
-          <h1 className="profile-username">{profile?.username?.toUpperCase()}</h1>
-          <p className="profile-bio">
+        <div className={styles['profile-info']}>
+          <h1 className={styles['profile-username']}>{profile?.username?.toUpperCase()}</h1>
+          <p className={styles['profile-bio']}>
             {profile?.bio || 'CINEPHILE & FILM ENTHUSIAST'}
             {profile?.created_at && (
-              <span className="join-date"> // JOINED {new Date(profile.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase()}</span>
+              <span className={styles['join-date']}> // JOINED {new Date(profile.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase()}</span>
             )}
           </p>
         </div>
@@ -162,32 +144,32 @@ export default function ProfilePage() {
       </section>
 
       {/* Stats Section */}
-      <section className="stats-section">
-        <Link href={`/user/${username}/ratings`} className="stat-card clickable">
-          <span className="stat-value">{stats.moviesRated}</span>
-          <span className="stat-label">MOVIES RATED</span>
+      <section className={styles['stats-section']}>
+        <Link href={`/user/${username}/ratings`} className={`${styles['stat-card']} ${styles['clickable']}`}>
+          <span className={styles['stat-value']}>{stats.moviesRated}</span>
+          <span className={styles['stat-label']}>MOVIES RATED</span>
         </Link>
-        <div className="stat-card accent">
-          <span className="stat-value">{stats.avgRating}</span>
-          <span className="stat-label">AVG. RATING</span>
+        <div className={`${styles['stat-card']} ${styles['accent']}`}>
+          <span className={styles['stat-value']}>{stats.avgRating}</span>
+          <span className={styles['stat-label']}>AVG. RATING</span>
         </div>
-        <StatsFollowerCard profileId={profile?.id} username={username} />
-        <StatsFollowingCard profileId={profile?.id} username={username} />
+        <StatsFollowerCard profileId={profile?.id} username={username} styles={styles} />
+        <StatsFollowingCard profileId={profile?.id} username={username} styles={styles} />
       </section>
 
       {/* Watchlist Section Header */}
-      <section className="watchlist-header-section">
-        <div className="section-title">
+      <section className={styles['watchlist-header-section']}>
+        <div className={styles['section-title']}>
           <h2>{profile?.username?.toUpperCase()}'S WATCHLIST</h2>
-          <span className="movie-count">{watchlist.length} MOVIES</span>
+          <span className={styles['movie-count']}>{watchlist.length} MOVIES</span>
         </div>
         {isOwner && (
-          <Link href="/discover" className="btn-add-movie">+ Add Movie</Link>
+          <Link href="/discover" className={styles['btn-add-movie']}>+ Add Movie</Link>
         )}
       </section>
 
       {/* Watchlist Grid */}
-      <section className="movies-section">
+      <section className={styles['movies-section']}>
         <WatchlistGrid
           watchlist={watchlist}
           isOwner={false}
@@ -199,15 +181,15 @@ export default function ProfilePage() {
       </section>
 
       {/* Footer */}
-      <footer className="profile-footer">
-        <div className="footer-logo">
+      <footer className={styles['profile-footer']}>
+        <div className={styles['footer-logo']}>
           <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
             <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l4.59-4.58L18 11l-6 6z"/>
           </svg>
           <span>MYWATCHLIST</span>
         </div>
-        <p className="footer-version">SYSTEM_VERSION: 1.0.0 // © 2026 MYWATCHLIST.CORP</p>
-        <div className="footer-links">
+        <p className={styles['footer-version']}>SYSTEM_VERSION: 1.0.0 // © 2026 MYWATCHLIST.CORP</p>
+        <div className={styles['footer-links']}>
           <a href="#">PRIVACY</a>
           <a href="#">TERMS</a>
           <a href="#">API</a>
@@ -217,42 +199,42 @@ export default function ProfilePage() {
   )
 }
 
-function StatsFollowerCard({ profileId, username }: { profileId?: string, username?: string }) {
+function StatsFollowerCard({ profileId, username, styles }: { profileId?: string, username?: string, styles: any }) {
   const { followerCount } = useFollow(profileId)
   
   if (!username) {
     return (
-      <div className="stat-card">
-        <span className="stat-value">{followerCount.toLocaleString()}</span>
-        <span className="stat-label">FOLLOWERS</span>
+      <div className={styles['stat-card']}>
+        <span className={styles['stat-value']}>{followerCount.toLocaleString()}</span>
+        <span className={styles['stat-label']}>FOLLOWERS</span>
       </div>
     )
   }
 
   return (
-    <Link href={`/user/${username}/followers`} className="stat-card clickable">
-      <span className="stat-value">{followerCount.toLocaleString()}</span>
-      <span className="stat-label">FOLLOWERS</span>
+    <Link href={`/user/${username}/followers`} className={`${styles['stat-card']} ${styles['clickable']}`}>
+      <span className={styles['stat-value']}>{followerCount.toLocaleString()}</span>
+      <span className={styles['stat-label']}>FOLLOWERS</span>
     </Link>
   )
 }
 
-function StatsFollowingCard({ profileId, username }: { profileId?: string, username?: string }) {
+function StatsFollowingCard({ profileId, username, styles }: { profileId?: string, username?: string, styles: any }) {
   const { followingCount } = useFollow(profileId)
   
   if (!username) {
     return (
-      <div className="stat-card">
-        <span className="stat-value">{followingCount.toLocaleString()}</span>
-        <span className="stat-label">FOLLOWING</span>
+      <div className={styles['stat-card']}>
+        <span className={styles['stat-value']}>{followingCount.toLocaleString()}</span>
+        <span className={styles['stat-label']}>FOLLOWING</span>
       </div>
     )
   }
 
   return (
-    <Link href={`/user/${username}/following`} className="stat-card clickable">
-      <span className="stat-value">{followingCount.toLocaleString()}</span>
-      <span className="stat-label">FOLLOWING</span>
+    <Link href={`/user/${username}/following`} className={`${styles['stat-card']} ${styles['clickable']}`}>
+      <span className={styles['stat-value']}>{followingCount.toLocaleString()}</span>
+      <span className={styles['stat-label']}>FOLLOWING</span>
     </Link>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import '../profile.css'
+import styles from '../profile.module.css'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { ProfileService, AuthService, RatingService, WatchlistService, TMDBService } from '@/services'
@@ -204,12 +204,13 @@ export default function RatingsPage() {
     ? (ratings.reduce((sum, r) => sum + r.rating_value, 0) / ratings.length).toFixed(1)
     : '0.0'
 
+
   if (loading) {
     return (
-      <div className="profile-page">
-        <div className="grid-background" />
-        <div className="border-glow" />
-        <div className="loading">
+      <div className={styles['profile-page']}>
+        <div className={styles['grid-background']} />
+        <div className={styles['border-glow']} />
+        <div className={styles['loading']}>
           <span>LOADING RATINGS...</span>
         </div>
       </div>
@@ -218,13 +219,13 @@ export default function RatingsPage() {
 
   if (notFound) {
     return (
-      <div className="profile-page">
-        <div className="grid-background" />
-        <div className="border-glow" />
-        <div className="not-found">
+      <div className={styles['profile-page']}>
+        <div className={styles['grid-background']} />
+        <div className={styles['border-glow']} />
+        <div className={styles['not-found']}>
           <h1>USER NOT FOUND</h1>
           <p>The profile @{username} does not exist.</p>
-          <button onClick={() => router.push(isLoggedIn ? '/dashboard' : '/discover')} className="btn-primary">
+          <button onClick={() => router.push(isLoggedIn ? '/dashboard' : '/discover')} className={styles['btn-primary']}>
             {isLoggedIn ? 'RETURN TO DASHBOARD' : 'RETURN TO DISCOVER'}
           </button>
         </div>
@@ -233,56 +234,56 @@ export default function RatingsPage() {
   }
 
   return (
-    <div className="profile-page ratings-page">
-      <div className="grid-background" />
-      <div className="border-glow" />
+    <div className={`${styles['profile-page']} ${styles['ratings-page']}`}>
+      <div className={styles['grid-background']} />
+      <div className={styles['border-glow']} />
 
       {/* Header */}
-      <header className="profile-header">
-        <div className="logo">
-          <Link href="/dashboard" className="logo-link">
-            <div className="logo-icon">
+      <header className={styles['profile-header']}>
+        <div className={styles['logo']}>
+          <Link href="/dashboard" className={styles['logo-link']}>
+            <div className={styles['logo-icon']}>
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l4.59-4.58L18 11l-6 6z"/>
               </svg>
             </div>
-            <span className="logo-text">MYWATCHLIST</span>
+            <span className={styles['logo-text']}>MYWATCHLIST</span>
           </Link>
         </div>
-        <nav className="header-nav">
-          <Link href="/discover" className="nav-link">Discover</Link>
-          <Link href={`/user/${username}`} className="nav-link">Profile</Link>
-          <Link href={`/user/${username}/ratings`} className="nav-link active">My Ratings</Link>
+        <nav className={styles['header-nav']}>
+          <Link href="/discover" className={styles['nav-link']}>Discover</Link>
+          <Link href={`/user/${username}`} className={styles['nav-link']}>Profile</Link>
+          <Link href={`/user/${username}/ratings`} className={`${styles['nav-link']} ${styles['active']}`}>My Ratings</Link>
         </nav>
       </header>
 
       {/* Breadcrumb */}
-      <div className="breadcrumb">
+      <div className={styles['breadcrumb']}>
         <Link href={`/user/${username}`}>@{username}</Link>
         <span>/</span>
-        <span className="current">RATINGS</span>
+        <span className={styles['current']}>RATINGS</span>
       </div>
 
       {/* Ratings Header */}
-      <section className="ratings-hero">
+      <section className={styles['ratings-hero']}>
         <h1>{profile?.username?.toUpperCase()}'S RATINGS</h1>
-        <div className="ratings-stats">
-          <div className="stat">
-            <span className="stat-value">{ratings.length}</span>
-            <span className="stat-label">TOTAL</span>
+        <div className={styles['ratings-stats']}>
+          <div className={styles['stat']}>
+            <span className={styles['stat-value']}>{ratings.length}</span>
+            <span className={styles['stat-label']}>TOTAL</span>
           </div>
-          <div className="stat accent">
-            <span className="stat-value">{avgRating}</span>
-            <span className="stat-label">AVG</span>
+          <div className={`${styles['stat']} ${styles['accent']}`}>
+            <span className={styles['stat-value']}>{avgRating}</span>
+            <span className={styles['stat-label']}>AVG</span>
           </div>
         </div>
       </section>
 
       {/* Ratings List */}
-      <section className="ratings-list">
+      <section className={styles['ratings-list']}>
         {ratings.length === 0 ? (
-          <div className="empty-state">
-            <div className="empty-icon">⭐</div>
+          <div className={styles['empty-state']}>
+            <div className={styles['empty-icon']}>⭐</div>
             <h3>NO RATINGS YET</h3>
             <p>
               {isOwner 
@@ -291,16 +292,16 @@ export default function RatingsPage() {
               }
             </p>
             {isOwner && (
-              <Link href="/discover" className="btn-primary">
+              <Link href="/discover" className={styles['btn-primary']}>
                 DISCOVER MOVIES
               </Link>
             )}
           </div>
         ) : (
           <>
-            <div className="ratings-grid">
+            <div className={styles['ratings-grid']}>
               {displayRatings.map((rating) => (
-                <div key={rating.id} className="rating-card">
+                <div key={rating.id} className={styles['rating-card']}>
                   {/* Mobile Menu Trigger (Absolute positioned over poster) */}
                   {isOwner && (
                     <div className="mobile-only mobile-menu-trigger" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
@@ -333,8 +334,8 @@ export default function RatingsPage() {
                     </div>
                   )}
 
-                  <Link href={`/movie/${rating.movie_id}`} className="rating-link">
-                    <div className="rating-poster">
+                  <Link href={`/movie/${rating.movie_id}`} className={styles['rating-link']}>
+                    <div className={styles['rating-poster']}>
                       {rating.movie?.poster_path ? (
                         <img 
                           src={TMDBService.getImageUrl(rating.movie.poster_path, 'w300') || ''} 
@@ -342,17 +343,17 @@ export default function RatingsPage() {
                           loading="lazy"
                         />
                       ) : (
-                        <div className="no-poster">🎬</div>
+                        <div className={styles['no-poster']}>🎬</div>
                       )}
                       {/* Only show rating value if logged in */}
                       {isLoggedIn && (
-                        <div className="rating-value">★ {rating.rating_value}</div>
+                        <div className={styles['rating-value']}>★ {rating.rating_value}</div>
                       )}
                     </div>
-                    <div className="rating-info">
+                    <div className={styles['rating-info']}>
                       <h3>{rating.movie?.title || `Movie #${rating.movie_id}`}</h3>
                       {isLoggedIn && (
-                        <span className="rating-date">
+                        <span className={styles['rating-date']}>
                           {new Date(rating.created_at).toLocaleDateString('en-US', { 
                             month: 'short', 
                             day: 'numeric',
@@ -368,7 +369,7 @@ export default function RatingsPage() {
                     <div className="desktop-only rating-actions-stacked">
                       {!rating.inWatchlist ? (
                         <button 
-                          className="add-watchlist-btn"
+                          className={styles['add-watchlist-btn']}
                           style={{justifyContent: 'center', width: '100%'}}
                           onClick={(e) => {
                             e.preventDefault()
@@ -382,7 +383,7 @@ export default function RatingsPage() {
                         </button>
                       ) : (
                         <button 
-                          className="in-watchlist-btn"
+                          className={styles['in-watchlist-btn']}
                           style={{justifyContent: 'center', width: '100%'}}
                           onClick={(e) => {
                             e.preventDefault()
@@ -423,9 +424,9 @@ export default function RatingsPage() {
 
             {/* Signup CTA for non-logged users */}
             {!isLoggedIn && ratings.length > displayRatings.length && (
-              <div className="signup-cta">
+              <div className={styles['signup-cta']}>
                 <p>Sign up to see all {ratings.length} ratings with scores!</p>
-                <Link href="/auth" className="btn-signup">CREATE ACCOUNT</Link>
+                <Link href="/auth" className={styles['btn-signup']}>CREATE ACCOUNT</Link>
               </div>
             )}
           </>
@@ -433,14 +434,14 @@ export default function RatingsPage() {
       </section>
 
       {/* Footer */}
-      <footer className="profile-footer">
-        <div className="footer-logo">
+      <footer className={styles['profile-footer']}>
+        <div className={styles['footer-logo']}>
           <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
             <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l4.59-4.58L18 11l-6 6z"/>
           </svg>
           <span>MYWATCHLIST</span>
         </div>
-        <p className="footer-version">SYSTEM_VERSION: 1.0.0 // © 2026 MYWATCHLIST.CORP</p>
+        <p className={styles['footer-version']}>SYSTEM_VERSION: 1.0.0 // © 2026 MYWATCHLIST.CORP</p>
       </footer>
     </div>
   )

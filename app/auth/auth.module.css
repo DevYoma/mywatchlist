@@ -286,6 +286,7 @@
     grid-template-columns: 1fr;
     text-align: center;
     gap: 2rem;
+    padding: 2rem 1rem;
   }
   
   .hero-section {
@@ -294,7 +295,10 @@
   
   .auth-card {
     max-width: 100%;
+    width: 85%;
+    margin: 0 auto;
   }
+
   
   .features-section {
     justify-content: center;

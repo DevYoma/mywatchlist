@@ -1,5 +1,4 @@
-@import '../dashboard/dashboard.css';
-@import '../../components/ActivityFeed/ActivityFeed.css';
+
 
 .activity-page {
   min-height: 100vh;

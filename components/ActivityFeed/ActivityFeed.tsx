@@ -1,9 +1,10 @@
 'use client'
 
+import styles from './ActivityFeed.module.css'
 import { useFollowingActivity } from '@/hooks'
 import Link from 'next/link'
 import Image from 'next/image'
-import { formatDistanceToNow } from 'date-fns'
+import { getTimeAgo } from '@/utils/date.utils'
 import type { ActivityItem } from '@/services/activity.service'
 
 interface ActivityFeedProps {
@@ -15,12 +16,12 @@ export function ActivityFeed({ userId }: ActivityFeedProps) {
 
   if (isLoading) {
     return (
-      <div className="activity-feed">
-        <h2 className="section-title">FRIENDS' LATEST RATINGS</h2>
-        <div className="loading-skeleton">
-          <div className="skeleton-item" />
-          <div className="skeleton-item" />
-          <div className="skeleton-item" />
+      <div className={styles['activity-feed']}>
+        <h2 className={styles['section-title']}>FRIENDS' LATEST RATINGS</h2>
+        <div className={styles['loading-skeleton']}>
+          <div className={styles['skeleton-item']} />
+          <div className={styles['skeleton-item']} />
+          <div className={styles['skeleton-item']} />
         </div>
       </div>
     )
@@ -28,8 +29,8 @@ export function ActivityFeed({ userId }: ActivityFeedProps) {
 
   if (error) {
     return (
-      <div className="activity-feed">
-        <h2 className="section-title">FRIENDS' LATEST RATINGS</h2>
+      <div className={styles['activity-feed']}>
+        <h2 className={styles['section-title']}>FRIENDS' LATEST RATINGS</h2>
         <p className="text-white/40 text-sm">Failed to load activity</p>
       </div>
     )
@@ -37,9 +38,9 @@ export function ActivityFeed({ userId }: ActivityFeedProps) {
 
   if (!activities || activities.length === 0) {
     return (
-      <div className="activity-feed">
-        <h2 className="section-title">FRIENDS' LATEST RATINGS</h2>
-        <div className="empty-state">
+      <div className={styles['activity-feed']}>
+        <h2 className={styles['section-title']}>FRIENDS' LATEST RATINGS</h2>
+        <div className={styles['empty-state']}>
           <p className="text-white/40 text-sm">
             No recent activity from people you follow
           </p>
@@ -52,15 +53,15 @@ export function ActivityFeed({ userId }: ActivityFeedProps) {
   }
 
   return (
-    <div className="activity-feed">
-      <h2 className="section-title">FRIENDS' LATEST RATINGS</h2>
-      <div className="activity-list">
+    <div className={styles['activity-feed']}>
+      <h2 className={styles['section-title']}>FRIENDS' LATEST RATINGS</h2>
+      <div className={styles['activity-list']}>
         {activities.slice(0, 3).map((activity) => (
           <ActivityCard key={activity.id} activity={activity} />
         ))}
       </div>
       {activities.length > 3 && (
-        <Link href="/activity" className="view-more-btn">
+        <Link href="/activity" className={styles['view-more-btn']}>
           VIEW MORE ACTIVITY ({activities.length - 3} MORE)
         </Link>
       )}
@@ -69,17 +70,14 @@ export function ActivityFeed({ userId }: ActivityFeedProps) {
 }
 
 function ActivityCard({ activity }: { activity: ActivityItem }) {
-  // Supabase returns UTC timestamps like "2026-02-03 04:24:04.503599" without 'Z'
-  // Append 'Z' to tell JavaScript it's UTC, otherwise it parses as local time
-  const timestamp = activity.created_at.replace(' ', 'T') + 'Z'
-  const timeAgo = formatDistanceToNow(new Date(timestamp), { addSuffix: true })
+  const timeAgo = getTimeAgo(activity.created_at)
 
   return (
-    <div className="activity-card">
+    <div className={styles['activity-card']}>
       {/* User Info */}
-      <div className="activity-header">
-        <Link href={`/user/${activity.user.username}`} className="user-info">
-          <div className="user-avatar">
+      <div className={styles['activity-header']}>
+        <Link href={`/user/${activity.user.username}`} className={styles['user-info']}>
+          <div className={styles['user-avatar']}>
             {activity.user.avatar_url ? (
               <Image
                 src={activity.user.avatar_url}
@@ -88,21 +86,21 @@ function ActivityCard({ activity }: { activity: ActivityItem }) {
                 className="object-cover"
               />
             ) : (
-              <div className="avatar-placeholder">
+              <div className={styles['avatar-placeholder']}>
                 {activity.user.username[0].toUpperCase()}
               </div>
             )}
           </div>
-          <span className="username">@{activity.user.username}</span>
+          <span className={styles['username']}>@{activity.user.username}</span>
         </Link>
-        <span className="time-ago">{timeAgo}</span>
+        <span className={styles['time-ago']}>{timeAgo}</span>
       </div>
 
       {/* Rating Info */}
-      <div className="activity-content">
-        <div className="movie-info">
+      <div className={styles['activity-content']}>
+        <div className={styles['movie-info']}>
           {activity.movie.poster_path && (
-            <Link href={`/movie/${activity.movie.id}`} className="movie-poster">
+            <Link href={`/movie/${activity.movie.id}`} className={styles['movie-poster']}>
               <Image
                 src={`https://image.tmdb.org/t/p/w92${activity.movie.poster_path}`}
                 alt={activity.movie.title}
@@ -112,17 +110,17 @@ function ActivityCard({ activity }: { activity: ActivityItem }) {
               />
             </Link>
           )}
-          <div className="rating-details">
-            <p className="rating-text">
+          <div className={styles['rating-details']}>
+            <p className={styles['rating-text']}>
               rated{' '}
-              <Link href={`/movie/${activity.movie.id}`} className="movie-title">
+              <Link href={`/movie/${activity.movie.id}`} className={styles['movie-title']}>
                 {activity.movie.title}
               </Link>
             </p>
-            <div className="rating-stars">
+            <div className={styles['rating-stars']}>
               {'★'.repeat(Math.floor(activity.rating))}
               {activity.rating % 1 !== 0 && '½'}
-              <span className="rating-value">{activity.rating.toFixed(1)}</span>
+              <span className={styles['rating-value']}>{activity.rating.toFixed(1)}</span>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import './watchlists.css'
+import styles from './watchlists.module.css'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth, useProfile, useAllWatchlists, useWatchlistLikeMutations, useUnreadActivityCount, TMDBService } from '@/hooks'
@@ -22,10 +22,10 @@ export default function WatchlistsPage() {
 
   if (isLoading) {
     return (
-      <div className="watchlists-page">
-        <div className="grid-background" />
-        <div className="border-glow" />
-        <div className="loading">
+      <div className={styles['watchlists-page']}>
+        <div className={styles['grid-background']} />
+        <div className={styles['border-glow']} />
+        <div className={styles['loading']}>
           <span>LOADING WATCHLISTS...</span>
         </div>
       </div>
@@ -33,9 +33,9 @@ export default function WatchlistsPage() {
   }
 
   return (
-    <div className="watchlists-page">
-      <div className="grid-background" />
-      <div className="border-glow" />
+    <div className={styles['watchlists-page']}>
+      <div className={styles['grid-background']} />
+      <div className={styles['border-glow']} />
 
       <Header 
         username={profile?.username}
@@ -44,19 +44,19 @@ export default function WatchlistsPage() {
         unreadCount={unreadCount}
       />
 
-      <div className="watchlists-container">
-        <section className="hero-section">
-          <h1 className="hero-title">WATCHLISTS</h1>
-          <p className="hero-subtitle">Discover what the community is watching</p>
+      <div className={styles['watchlists-container']}>
+        <section className={styles['hero-section']}>
+          <h1 className={styles['hero-title']}>WATCHLISTS</h1>
+          <p className={styles['hero-subtitle']}>Discover what the community is watching</p>
         </section>
 
-        <section className="watchlists-content">
+        <section className={styles['watchlists-content']}>
           {!watchlists || watchlists.length === 0 ? (
-            <div className="empty-state">
+            <div className={styles['empty-state']}>
               <p className="text-white/40 text-sm">No watchlists found</p>
             </div>
           ) : (
-            <div className="watchlist-grid">
+            <div className={styles['watchlist-grid']}>
               {watchlists.map((watchlist) => (
                 <WatchlistCard
                   key={watchlist.id}
@@ -87,10 +87,10 @@ function WatchlistCard({ watchlist, currentUserId, onLike, onUnlike, isPending }
   const isOwnWatchlist = currentUserId === watchlist.id
 
   return (
-    <div className="watchlist-card">
+    <div className={styles['watchlist-card']}>
       {/* Owner Info */}
-      <Link href={`/user/${watchlist.owner.username}`} className="watchlist-owner">
-        <div className="owner-avatar">
+      <Link href={`/user/${watchlist.owner.username}`} className={styles['watchlist-owner']}>
+        <div className={styles['owner-avatar']}>
           {watchlist.owner.avatar_url ? (
             <Image
               src={watchlist.owner.avatar_url}
@@ -99,32 +99,32 @@ function WatchlistCard({ watchlist, currentUserId, onLike, onUnlike, isPending }
               className="object-cover"
             />
           ) : (
-            <div className="avatar-placeholder">
+            <div className={styles['avatar-placeholder']}>
               {watchlist.owner.username[0].toUpperCase()}
             </div>
           )}
         </div>
-        <span className="owner-username">@{watchlist.owner.username}</span>
+        <span className={styles['owner-username']}>@{watchlist.owner.username}</span>
       </Link>
 
       {/* Movie Posters Grid */}
-      <div className="movie-posters-grid">
+      <div className={styles['movie-posters-grid']}>
         {watchlist.recent_movies.slice(0, 4).map((movie, idx) => (
           <MoviePoster key={idx} movieId={movie.movie_id} />
         ))}
       </div>
 
       {/* Stats */}
-      <div className="watchlist-stats">
-        <span className="stat-item">{watchlist.total_ratings} movies</span>
-        <span className="stat-divider">•</span>
-        <span className="stat-item">{watchlist.like_count} likes</span>
+      <div className={styles['watchlist-stats']}>
+        <span className={styles['stat-item']}>{watchlist.total_ratings} movies</span>
+        <span className={styles['stat-divider']}>•</span>
+        <span className={styles['stat-item']}>{watchlist.like_count} likes</span>
       </div>
 
       {/* Like Button */}
       {!isOwnWatchlist && currentUserId && (
         <button
-          className={`like-btn ${watchlist.is_liked_by_current_user ? 'liked' : ''}`}
+          className={`${styles['like-btn']} ${watchlist.is_liked_by_current_user ? styles['liked'] : ''}`}
           onClick={watchlist.is_liked_by_current_user ? onUnlike : onLike}
           disabled={isPending}
         >
@@ -145,11 +145,11 @@ function MoviePoster({ movieId }: { movieId: number }) {
   })
 
   if (!movie?.poster_path) {
-    return <div className="movie-poster-placeholder">?</div>
+    return <div className={styles['movie-poster-placeholder']}>?</div>
   }
 
   return (
-    <div className="movie-poster">
+    <div className={styles['movie-poster']}>
       <Image
         src={`https://image.tmdb.org/t/p/w185${movie.poster_path}`}
         alt={movie.title}

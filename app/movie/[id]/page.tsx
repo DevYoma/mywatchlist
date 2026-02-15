@@ -1,7 +1,7 @@
 'use client'
 
-import './movie.css'
-import './movie-mobile.css'
+import styles from './movie.module.css'
+import mobileStyles from './movie-mobile.module.css'
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -135,10 +135,10 @@ export default function MoviePage() {
 
   if (loading) {
     return (
-      <div className="movie-page">
-        <div className="grid-background" />
-        <div className="border-glow" />
-        <div className="loading">
+      <div className={styles['movie-page']}>
+        <div className={styles['grid-background']} />
+        <div className={styles['border-glow']} />
+        <div className={styles['loading']}>
           <span>LOADING...</span>
         </div>
       </div>
@@ -147,12 +147,12 @@ export default function MoviePage() {
 
   if (!movie) {
     return (
-      <div className="movie-page">
-        <div className="grid-background" />
-        <div className="border-glow" />
-        <div className="error-state">
+      <div className={styles['movie-page']}>
+        <div className={styles['grid-background']} />
+        <div className={styles['border-glow']} />
+        <div className={styles['error-state']}>
           <h1>Movie not found</h1>
-          <Link href="/discover" className="btn-back">Back to Discover</Link>
+          <Link href="/discover" className={styles['btn-back']}>Back to Discover</Link>
         </div>
       </div>
     )
@@ -164,9 +164,9 @@ export default function MoviePage() {
   const runtimeText = movie.runtime ? `${hours}h ${minutes}m` : 'N/A'
 
   return (
-    <div className="movie-page">
-      <div className="grid-background" />
-      <div className="border-glow" />
+    <div className={styles['movie-page']}>
+      <div className={styles['grid-background']} />
+      <div className={styles['border-glow']} />
 
       <Header 
         username={profile?.username}
@@ -176,90 +176,90 @@ export default function MoviePage() {
       />
 
       {/* Breadcrumb */}
-      <div className="breadcrumb">
+      <div className={styles['breadcrumb']}>
         <Link href="/discover">DATABASE</Link>
         <span>/</span>
         <Link href="/discover">SCI-FI_SECTOR</Link>
         <span>/</span>
-        <span className="current">{movie.title?.toUpperCase().replace(/ /g, '_')}</span>
+        <span className={styles['current']}>{movie.title?.toUpperCase().replace(/ /g, '_')}</span>
       </div>
 
       {/* Main Content */}
-      <main className="movie-main">
-        <div className="movie-content">
+      <main className={styles['movie-main']}>
+        <div className={styles['movie-content']}>
           {/* Left: Poster */}
-          <div className="poster-section">
-            <div className="movie-poster">
+          <div className={styles['poster-section']}>
+            <div className={styles['movie-poster']}>
               {movie.poster_path ? (
                 <img 
                   src={TMDBService.getImageUrl(movie.poster_path, 'w500') || ''} 
                   alt={movie.title} 
                 />
               ) : (
-                <div className="no-poster">🎬</div>
+                <div className={styles['no-poster']}>🎬</div>
               )}
             </div>
-            <div className="movie-credits">
-              <div className="credit">
-                <span className="credit-label">DIRECTOR</span>
-                <span className="credit-value">-</span>
+            <div className={styles['movie-credits']}>
+              <div className={styles['credit']}>
+                <span className={styles['credit-label']}>DIRECTOR</span>
+                <span className={styles['credit-value']}>-</span>
               </div>
-              <div className="credit">
-                <span className="credit-label">RUNTIME</span>
-                <span className="credit-value">{runtimeText}</span>
+              <div className={styles['credit']}>
+                <span className={styles['credit-label']}>RUNTIME</span>
+                <span className={styles['credit-value']}>{runtimeText}</span>
               </div>
             </div>
           </div>
 
           {/* Right: Details */}
-          <div className="details-section">
-            <h1 className="movie-title">{movie.title}</h1>
+          <div className={styles['details-section']}>
+            <h1 className={styles['movie-title']}>{movie.title}</h1>
             
-            <div className="movie-meta">
-              <span className="meta-item">{movie.release_date?.split('-')[0] || 'N/A'}</span>
+            <div className={styles['movie-meta']}>
+              <span className={styles['meta-item']}>{movie.release_date?.split('-')[0] || 'N/A'}</span>
               {movie.vote_average && (
-                <span className="meta-item rating">
-                  <span className="star">★</span> {movie.vote_average.toFixed(1)} TMDB
+                <span className={`${styles['meta-item']} ${styles['rating']}`}>
+                  <span className={styles['star']}>★</span> {movie.vote_average.toFixed(1)} TMDB
                 </span>
               )}
-              <span className="meta-item runtime">{runtimeText}</span>
+              <span className={`${styles['meta-item']} ${styles['runtime']}`}>{runtimeText}</span>
             </div>
 
-            <div className="genre-tags">
+            <div className={styles['genre-tags']}>
               {movie.genres?.map((genre) => (
-                <span key={genre.id} className="genre-tag">{genre.name}</span>
+                <span key={genre.id} className={styles['genre-tag']}>{genre.name}</span>
               ))}
             </div>
 
-            <p className="movie-overview">{movie.overview}</p>
+            <p className={styles['movie-overview']}>{movie.overview}</p>
 
             {/* Personal Rating Section */}
-            <div className="rating-section">
-              <div className="rating-header">
+            <div className={styles['rating-section']}>
+              <div className={styles['rating-header']}>
                 <h3>PERSONAL RATING</h3>
-                <p className="rating-subtitle">Assign a numerical value to this experience</p>
+                <p className={styles['rating-subtitle']}>Assign a numerical value to this experience</p>
               </div>
 
-              <div className="rating-slider-container">
-                <div className="slider-track">
+              <div className={styles['rating-slider-container']}>
+                <div className={styles['slider-track']}>
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                     <button
                       key={num}
-                      className={`slider-dot ${sliderValue >= num ? 'active' : ''}`}
+                      className={`${styles['slider-dot']} ${sliderValue >= num ? styles['active'] : ''}`}
                       onClick={() => setSliderValue(num)}
                     >
                       {num}
                     </button>
                   ))}
                 </div>
-                <div className="rating-display">
-                  <span className="rating-value">{sliderValue.toFixed(1)}</span>
-                  <span className="rating-max">/ 10</span>
+                <div className={styles['rating-display']}>
+                  <span className={styles['rating-value']}>{sliderValue.toFixed(1)}</span>
+                  <span className={styles['rating-max']}>/ 10</span>
                 </div>
               </div>
 
               <button 
-                className="save-rating-btn" 
+                className={styles['save-rating-btn']} 
                 onClick={handleRateMovie}
                 disabled={isRating || !isLoggedIn || sliderValue === 0}
               >
@@ -268,7 +268,7 @@ export default function MoviePage() {
 
               {userRating && (
                 <button 
-                  className="delete-rating-btn" 
+                  className={styles['delete-rating-btn']} 
                   onClick={handleDeleteRating}
                 >
                   REMOVE RATING
@@ -276,7 +276,7 @@ export default function MoviePage() {
               )}
 
               {!isLoggedIn && (
-                <p className="login-hint">
+                <p className={styles['login-hint']}>
                   <Link href="/auth">Sign in</Link> to save your rating
                 </p>
               )}
@@ -284,7 +284,7 @@ export default function MoviePage() {
               {/* Add to Watchlist - only shown after rating */}
               {isLoggedIn && userRating && !isInWatchlist && (
                 <button 
-                  className="add-to-watchlist-btn" 
+                  className={styles['add-to-watchlist-btn']} 
                   onClick={handleAddToWatchlist}
                   disabled={isAdding}
                 >
@@ -297,14 +297,14 @@ export default function MoviePage() {
 
               {isLoggedIn && isInWatchlist && (
                 <>
-                  <div className="in-watchlist-badge">
+                  <div className={styles['in-watchlist-badge']}>
                     <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
                       <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                     </svg>
                     IN YOUR WATCHLIST
                   </div>
                   <button 
-                    className="remove-from-watchlist-btn"
+                    className={styles['remove-from-watchlist-btn']}
                     onClick={handleRemoveFromWatchlist}
                     disabled={isRemoving}
                   >
@@ -315,43 +315,43 @@ export default function MoviePage() {
             </div>
 
             {/* Global Ratings */}
-            <div className="global-ratings">
-              <div className="global-average">
-                <span className="avg-value">{globalAverage ? globalAverage.toFixed(1) : '-'}</span>
-                <div className="avg-stars">
+            <div className={styles['global-ratings']}>
+              <div className={styles['global-average']}>
+                <span className={styles['avg-value']}>{globalAverage ? globalAverage.toFixed(1) : '-'}</span>
+                <div className={styles['avg-stars']}>
                   {[1, 2, 3, 4, 5].map((star) => (
                     <span 
                       key={star} 
-                      className={`star ${globalAverage && star <= Math.round(globalAverage / 2) ? 'filled' : ''}`}
+                      className={`${styles['star']} ${globalAverage && star <= Math.round(globalAverage / 2) ? styles['filled'] : ''}`}
                     >
                       ★
                     </span>
                   ))}
                 </div>
-                <span className="total-ratings">{totalRatings} ALL TIME RATINGS</span>
+                <span className={styles['total-ratings']}>{totalRatings} ALL TIME RATINGS</span>
               </div>
             </div>
 
             {/* Recent User Activity */}
             {recentRatings.length > 0 && (
-              <div className="recent-activity">
-                <div className="activity-header">
+              <div className={styles['recent-activity']}>
+                <div className={styles['activity-header']}>
                   <h3>RECENT USER ACTIVITY</h3>
-                  <span className="see-all">ACCESS ALL RECORDS</span>
+                  <span className={styles['see-all']}>ACCESS ALL RECORDS</span>
                 </div>
-                <div className="activity-list">
+                <div className={styles['activity-list']}>
                   {recentRatings.slice(0, 3).map((rating) => (
-                    <div key={rating.id} className="activity-item">
-                      <div className="user-avatar">
+                    <div key={rating.id} className={styles['activity-item']}>
+                      <div className={styles['user-avatar']}>
                         <svg viewBox="0 0 24 24" fill="currentColor">
                           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                         </svg>
                       </div>
-                      <div className="activity-info">
-                        <span className="activity-user">@{rating.profile?.username || 'user'}</span>
-                        <span className="activity-label">Rated</span>
+                      <div className={styles['activity-info']}>
+                        <span className={styles['activity-user']}>@{rating.profile?.username || 'user'}</span>
+                        <span className={styles['activity-label']}>Rated</span>
                       </div>
-                      <span className="activity-rating">{rating.rating_value}</span>
+                      <span className={styles['activity-rating']}>{rating.rating_value}</span>
                     </div>
                   ))}
                 </div>
@@ -362,7 +362,7 @@ export default function MoviePage() {
       </main>
 
       {/* Footer */}
-      <footer className="movie-footer">
+      <footer className={styles['movie-footer']}>
         <span>© MYWATCHLIST // SYSTEM_V_0.0.0</span>
       </footer>
     </div>

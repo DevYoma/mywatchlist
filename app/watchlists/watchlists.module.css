@@ -1,4 +1,4 @@
-@import '../dashboard/dashboard.css';
+
 
 .watchlists-page {
   min-height: 100vh;
@@ -199,4 +199,14 @@
 .empty-state {
   text-align: center;
   padding: 3rem 1rem;
+}
+
+@media (max-width: 768px) {
+  .watchlists-container {
+    padding: 2rem 1rem;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
 }

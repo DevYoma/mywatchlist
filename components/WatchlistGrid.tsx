@@ -1,5 +1,6 @@
 'use client'
 
+import styles from './WatchlistGrid.module.css'
 import Link from 'next/link'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -49,15 +50,15 @@ export function WatchlistGrid({
   }
 
   if (isLoading) {
-    return <div className="loading-state">Loading watchlist...</div>
+    return <div className={styles['loading-state']}>Loading watchlist...</div>
   }
 
   if (!watchlist || watchlist.length === 0) {
     return (
-      <div className="empty-state">
+      <div className={styles['empty-state']}>
         <p>No movies in this watchlist yet!</p>
         {isOwner && (
-          <Link href="/discover" className="btn-add">+ Browse Movies</Link>
+          <Link href="/discover" className={styles['btn-add']}>+ Browse Movies</Link>
         )}
       </div>
     )
@@ -68,14 +69,14 @@ export function WatchlistGrid({
 
   return (
     <>
-      <div className="watchlist-grid">
+      <div className={styles['watchlist-grid']}>
         {displayItems.map((item) => (
           <Link 
             key={item.id} 
             href={`/movie/${item.tmdb_id}`}
-            className="movie-card"
+            className={styles['movie-card']}
           >
-            <div className="movie-poster">
+            <div className={styles['movie-poster']}>
               {item.poster_path ? (
                 <img 
                   src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} 
@@ -83,11 +84,11 @@ export function WatchlistGrid({
                   loading="lazy" 
                 />
               ) : (
-                <div className="no-poster">🎬</div>
+                <div className={styles['no-poster']}>🎬</div>
               )}
               {isOwner && onRemove && (
                 <button 
-                  className="remove-btn"
+                  className={styles['remove-btn']}
                   onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
@@ -101,10 +102,10 @@ export function WatchlistGrid({
                 </button>
               )}
               {showRatings && item.rating && (
-                <div className="rating-badge">★ {item.rating}</div>
+                <div className={styles['rating-badge']}>★ {item.rating}</div>
               )}
             </div>
-            <div className="movie-info">
+            <div className={styles['movie-info']}>
               <h3>{item.title}</h3>
             </div>
           </Link>
@@ -113,33 +114,33 @@ export function WatchlistGrid({
 
       {/* Sign up CTA for non-logged users */}
       {limitedView && !isLoggedIn && watchlist.length > displayItems.length && (
-        <div className="signup-cta">
+        <div className={styles['signup-cta']}>
           <p>Sign up to see all {watchlist.length} movies with ratings!</p>
-          <Link href="/auth" className="btn-signup">CREATE ACCOUNT</Link>
+          <Link href="/auth" className={styles['btn-signup']}>CREATE ACCOUNT</Link>
         </div>
       )}
 
       {showLoadMore && hasMore && isLoggedIn && (
-        <button className="load-more-btn">
+        <button className={styles['load-more-btn']}>
           LOAD FULL WATCHLIST ({itemsToShow.length - (maxItems || 0)} MORE)
         </button>
       )}
 
       {/* Delete Confirmation Modal */}
       {deleteConfirm && (
-        <div className="modal-overlay" onClick={() => setDeleteConfirm(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className={styles['modal-overlay']} onClick={() => setDeleteConfirm(null)}>
+          <div className={styles['modal-content']} onClick={(e) => e.stopPropagation()}>
             <h3>Remove from Watchlist?</h3>
             <p>Are you sure you want to remove <strong>{deleteConfirm.title}</strong> from your watchlist?</p>
-            <div className="modal-actions">
+            <div className={styles['modal-actions']}>
               <button 
-                className="btn-cancel" 
+                className={styles['btn-cancel']} 
                 onClick={() => setDeleteConfirm(null)}
               >
                 Cancel
               </button>
               <button 
-                className="btn-confirm" 
+                className={styles['btn-confirm']} 
                 onClick={() => handleRemove(deleteConfirm.id)}
                 disabled={isRemoving}
               >

@@ -1,6 +1,6 @@
 'use client'
 
-import './discover.css'
+import styles from './discover.module.css'
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth, useProfile, useTrending, useSearchMovies, useWatchlist, useUnreadActivityCount, TMDBService } from '@/hooks'
@@ -41,7 +41,7 @@ export default function DiscoverPage() {
   
   // Ref for debounce timer
   const timerRef = useRef<NodeJS.Timeout | null>(null)
-  console.log(timerRef)
+
 
   // Handle search input with proper debouncing
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +60,7 @@ export default function DiscoverPage() {
   }
 
   // Cleanup timer on unmount
-useEffect(() => {
+  useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current)
     }
@@ -120,9 +120,9 @@ useEffect(() => {
   }
 
   return (
-    <div className="discover-page">
-      <div className="grid-background" />
-      <div className="border-glow" />
+    <div className={styles['discover-page']}>
+      <div className={styles['grid-background']} />
+      <div className={styles['border-glow']} />
 
       <Header 
         username={profile?.username}
@@ -132,16 +132,16 @@ useEffect(() => {
       />
 
       {/* Main Content */}
-      <main className="discover-main">
-        <div className="page-title">
+      <main className={styles['discover-main']}>
+        <div className={styles['page-title']}>
           <h1>Search & Quick Rate</h1>
           <p>FIND AND RATE MOVIES TO REFINE YOUR TASTE PROFILE</p>
         </div>
 
         {/* Search & Filters */}
-        <div className="search-filters">
-          <div className="search-box">
-            <svg className="search-icon" viewBox="0 0 24 24" fill="currentColor">
+        <div className={styles['search-filters']}>
+          <div className={styles['search-box']}>
+            <svg className={styles['search-icon']} viewBox="0 0 24 24" fill="currentColor">
               <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
             </svg>
             <input
@@ -149,18 +149,18 @@ useEffect(() => {
               placeholder="Search by title, genre, or director..."
               value={searchInput}
               onChange={handleSearchChange}
-              className="search-input"
+              className={styles['search-input']}
             />
             {searchInput && (
-              <span className="search-badge">
+              <span className={styles['search-badge']}>
                 {searchInput.length < 3 ? 'TYPE MORE...' : 'SEARCHING'}
               </span>
             )}
           </div>
 
-          <div className="filter-row">
+          <div className={styles['filter-row']}>
             <select 
-              className="genre-select"
+              className={styles['genre-select']}
               value={selectedGenre || ''}
               onChange={(e) => setSelectedGenre(e.target.value ? Number(e.target.value) : null)}
             >
@@ -170,7 +170,7 @@ useEffect(() => {
               ))}
             </select>
 
-            <button className="filter-toggle">
+            <button className={styles['filter-toggle']}>
               <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
                 <path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/>
               </svg>
@@ -179,13 +179,13 @@ useEffect(() => {
         </div>
 
         {/* Movie Grid */}
-        <section className="movies-grid">
+        <section className={styles['movies-grid']}>
           {loading ? (
-            <div className="loading-state">
+            <div className={styles['loading-state']}>
               <span>LOADING MOVIES...</span>
             </div>
           ) : movies.length === 0 ? (
-            <div className="empty-state">
+            <div className={styles['empty-state']}>
               <h3>NO MOVIES FOUND</h3>
               <p>Try a different search term or genre filter.</p>
             </div>
@@ -193,10 +193,10 @@ useEffect(() => {
             movies.map(movie => (
               <div 
                 key={movie.id} 
-                className="movie-card"
+                className={styles['movie-card']}
                 onClick={() => router.push(`/movie/${movie.id}`)}
               >
-                <div className="movie-poster">
+                <div className={styles['movie-poster']}>
                   {movie.poster_path ? (
                     <img 
                       src={TMDBService.getImageUrl(movie.poster_path, 'w500') || ''} 
@@ -204,13 +204,13 @@ useEffect(() => {
                       loading="lazy"
                     />
                   ) : (
-                    <div className="no-poster">
+                    <div className={styles['no-poster']}>
                       <span>🎬</span>
                     </div>
                   )}
-                  <div className="movie-overlay">
+                  <div className={styles['movie-overlay']}>
                     <button 
-                      className="quick-rate-btn"
+                      className={styles['quick-rate-btn']}
                       onClick={(e) => {
                         e.stopPropagation()
                         handleRateClick(movie.id)
@@ -222,7 +222,7 @@ useEffect(() => {
                       RATE
                     </button>
                     <button 
-                      className={`quick-add-btn ${isInWatchlist(movie.id) ? 'added' : ''}`}
+                      className={`${styles['quick-add-btn']} ${isInWatchlist(movie.id) ? styles['added'] : ''}`}
                       onClick={(e) => {
                         e.stopPropagation()
                         handleAddToWatchlist(movie)
@@ -236,18 +236,18 @@ useEffect(() => {
                     </button>
                   </div>
                 </div>
-                <div className="movie-info">
-                  <h3 className="movie-title">{movie.title}</h3>
-                  <div className="movie-meta">
-                    <span className="movie-year">{movie.release_date?.slice(0, 4) || 'N/A'}</span>
-                    <span className="meta-separator">•</span>
-                    <span className="movie-rating">
+                <div className={styles['movie-info']}>
+                  <h3 className={styles['movie-title']}>{movie.title}</h3>
+                  <div className={styles['movie-meta']}>
+                    <span className={styles['movie-year']}>{movie.release_date?.slice(0, 4) || 'N/A'}</span>
+                    <span className={styles['meta-separator']}>•</span>
+                    <span className={styles['movie-rating']}>
                       <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12">
                         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                       </svg>
                       {movie.vote_average.toFixed(1)}
                     </span>
-                    <span className="genre-tag">
+                    <span className={styles['genre-tag']}>
                       {GENRES.find(g => movie.genre_ids.includes(g.id))?.name || 'Movie'}
                     </span>
                   </div>
@@ -259,7 +259,7 @@ useEffect(() => {
 
         {/* Results count */}
         {!loading && movies.length > 0 && (
-          <div className="results-count">
+          <div className={styles['results-count']}>
             SHOWING {movies.length} OF {movies.length}+ RESULTS
           </div>
         )}
